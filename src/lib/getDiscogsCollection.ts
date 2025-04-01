@@ -14,7 +14,7 @@ export interface BasicInformation {
   id: number;
   title: string;
   year: number;
-  resouce_url: string;
+  resource_url: string;
   // thumb: string;
   // cover_image: string;
 }
