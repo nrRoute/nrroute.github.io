@@ -26,7 +26,7 @@ export interface DiscogsCollectionResponseError {
 export async function getDiscogsCollection(
   username: string,
   page: number = 1
-): Promise<CollectionItem | DiscogsCollectionResponseError> {
+): Promise<CollectionItem[] | DiscogsCollectionResponseError> {
   const url = `https://api.discogs.com/users/${username}/collection/folders/0/releases?page=${page}&per_page=50`;
 
   try {
