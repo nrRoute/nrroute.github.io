@@ -66,7 +66,13 @@ export default defineConfig({
           rel: ['noopener', 'noreferrer'],
         }
       ],
-      rehypeMermaid,
+      [
+        rehypeMermaid,
+        {
+          strategy: "img-svg",
+          dark: true,
+        }
+      ]
     ],
   }
 });
