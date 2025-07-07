@@ -12,6 +12,7 @@ import remarkMath from 'remark-math';
 
 import rehypeKatex from 'rehype-katex';
 import rehypeExternalLinks from 'rehype-external-links';
+import rehypeMermaid from 'rehype-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
@@ -39,6 +40,10 @@ export default defineConfig({
     format: "file",
   },
   markdown: {
+    syntaxHighlight: {
+      type: "shiki",
+      excludeLangs: ["mermaid"]
+    },
     remarkRehype: {
       footnoteLabel: "脚注",
       footnoteLabelTagName: 'h1',
@@ -60,7 +65,8 @@ export default defineConfig({
           target: '_blank',
           rel: ['noopener', 'noreferrer'],
         }
-      ]
+      ],
+      rehypeMermaid,
     ],
   }
 });
