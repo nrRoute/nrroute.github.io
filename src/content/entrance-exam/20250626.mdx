@@ -1,0 +1,217 @@
+---
+title: 院試勉強20250626
+created: 2025-06-26
+prev: entrance-exam/20250624
+next: entrance-exam/20250627
+tags:
+- math
+modified: 2025-07-21
+---
+
+A-1を少し触ってみたが、全てを忘れていて困った。行列の積や部分積分すらうろ覚えでさすがに酷すぎる。
+微積は正直初学に近い部分もあって絶望を感じている。
+
+# 部分積分
+
+$$
+\int fg = fG - \int f'G
+$$
+
+# ガウス積分
+
+$$
+\int_{-\infty}^{\infty} e^{-x^2}dx=\sqrt{\pi}
+$$
+
+というもの。被積分関数は偶関数であるから、
+
+$$
+\int_{0}^{\infty} e^{-x^2}dx=\frac{\sqrt{\pi}}{2}
+$$
+
+もいえる。$x^2$ に係数がついているときは、置換積分で同じ形にできる。
+
+しかし、おそらくこのまま書いても点数がつかないので、導出を覚えておくべきだろう。
+
+$$
+\left(\int_{0}^{\infty}e^{-x^2}dx\right)^2 \\
+=\int_{0}^{\infty}e^{-x^2}dx\int_{0}^{\infty}e^{-y^2}dy \\
+=\int_{0}^{\infty}\int_{0}^{\infty}e^{-(x^2+y^2)}dxdy
+$$
+
+で、$x=r\cos{\theta}, y=r\sin{\theta} ~ (r>0)$ と極座標変換する。
+
+ヤコビアンを計算すると、
+
+$$
+\begin{vmatrix}
+  \frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\
+  \frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+=
+\begin{vmatrix}
+  \cos\theta & -r\sin\theta \\
+  \sin\theta & r\cos\theta
+\end{vmatrix}
+= r(\cos{\theta}^2 + \sin{\theta}^2) = r
+$$
+
+となるので、$dxdy = rdrd\theta$ とわかる。
+
+これによって変換すると、もとの積分は
+
+$$
+\int_{0}^{\pi/2}\int_{0}^{\infty}e^{-r^2}rdrd\theta
+$$
+
+これを解いて、答えを得る。
+
+$$
+\int_{0}^{\pi/2}\left[-\frac{e^{-r^2}}{2}\right]_{0}^{\infty}d\theta
+=\Big[\theta\Big]_{0}^{\pi/2} = \frac{\pi}{2}
+$$
+
+2024年の試験には、ちょうど
+
+$$
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{-(x^2+y^2)}dxdy
+$$
+
+を計算させる問題が出題されている。被積分関数が偶関数であるから、上の方法に落とし込める。
+
+# ガンマ関数とその性質
+
+## 定義
+
+ガンマ関数（正の実数の場合）は、$x>0$ に対して、
+
+$$
+\Gamma(x) = \int_{0}^{\infty}e^{-t}t^{x-1}dt
+$$
+
+という式で定まる。
+
+## 性質
+
+一つ目は、任意の正の実数 $x$ に対して、
+
+$$
+\Gamma(x+1) = x\Gamma(x)
+$$
+
+これは部分積分で証明できる。
+
+二つ目は、1/2での値がわかるというもので、
+
+$$
+\Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}
+$$
+
+これはガウス積分と置換積分で導出できる。具体的には、$\Gamma(1/2)$ の $t$ を $u^2$ などで置換するとよい。
+
+二つ目の性質を問う問題が2024年に出題されている。
+
+# その他
+
+## 連鎖律
+
+2023年のA-1の最初の問題がよくわからなかったので、NotebookLMに聞いたら、こう返ってきた。
+
+以下回答（抜粋）
+
+> 3.  **(a) の導出（勾配の大きさの関係）**:
+>     この関係式は、関数の勾配の二乗の大きさが、直交座標系と極座標系のどちらで計算しても等しくなることを示しています。
+>
+>     *   まず、$\frac{\partial z}{\partial x}$ と $\frac{\partial z}{\partial y}$ を連鎖律を用いて極座標での導関数 $\frac{\partial z}{\partial r}$ と $\frac{\partial z}{\partial \theta}$ で表現します。
+>         *   $\frac{\partial z}{\partial x} = \frac{\partial z}{\partial r}\frac{\partial r}{\partial x} + \frac{\partial z}{\partial \theta}\frac{\partial \theta}{\partial x} = \frac{\partial z}{\partial r} \cos\theta - \frac{\partial z}{\partial \theta} \frac{\sin\theta}{r}$
+>         *   $\frac{\partial z}{\partial y} = \frac{\partial z}{\partial r}\frac{\partial r}{\partial y} + \frac{\partial z}{\partial \theta}\frac{\partial \theta}{\partial y} = \frac{\partial z}{\partial r} \sin\theta + \frac{\partial z}{\partial \theta} \frac{\cos\theta}{r}$
+>     *   次に、これらの表現を $(\frac{\partial z}{\partial x})^2 + (\frac{\partial z}{\partial y})^2$ の左辺に代入し、展開します。
+>     *   展開すると、三角関数の恒等式 ($\cos^2\theta + \sin^2\theta = 1$) を用いて項が相殺され、最終的に右辺の $(\frac{\partial z}{\partial r})^2 + \frac{1}{r^2}(\frac{\partial z}{\partial\theta})^2$ と等しくなることを示せます。
+
+なんか足してる。多変数の連鎖律もわかってない・・・
+
+偏微分の積の微分とかもかなり酷い認識をしていた。係数に作用素が影響する場合を知らなかった。
+
+## ロピタルの定理
+
+まず何か：
+$$
+\lim_{x\to a}\frac{f(x)}{g(x)} = \lim_{x\to a}\frac{f'(x)}{g'(x)}
+$$
+
+条件：
+- $\lim_{x\to a}\frac{f'(x)}{g'(x)}$ が存在
+- 極限の行き先の十分近くで $g'(x)\neq 0 ~ (a-\gamma \lt x \lt a, a\lt x \lt a+\gamma)$
+
+使う時は、すぐにイコールで繋ぐのではなく、まず $\lim_{x\to a}\frac{f'(x)}{g'(x)}$ を別に計算するように見せて、実際に値が求められたら、$g'(x)\neq 0$ と合わせて繋ぐとよさそう。
+
+複数回使う場合もある。
+
+### 例題
+
+$$
+\lim_{x\to 0}\left(\frac{1}{\sin{x}^2} - \frac{1}{x}\right)
+$$
+
+$$
+\lim_{x\to\infty}\frac{x^2}{e^x}
+$$
+
+## 積分の面積公式、曲線の長さの公式
+
+極座標の積分
+
+$$
+S = \frac{1}{2}\int_{\theta}^{\theta'} r^2d\theta
+$$
+
+一周分積分すると0になるものにも注意（$cos\theta$ など）。
+
+### 例題
+
+$$
+r = 1 + \cos\theta
+$$
+
+## 余因子展開を使った逆行列の求め方
+
+まず符号 $(-1)^{i+j}$ に注意。最後に転置することにも注意。
+
+## ヘッセ行列
+
+あんまりよくわかっていない。なんか、多変数関数の極値とか形を求めるのに使えたりするらしい。
+多変数関数の極値とかについて、それぞれの変数で偏微分して、全部が0になる必要があるので、それぞれの式で0になるx,yがあるかをみる。
+
+$$
+H=
+\begin{pmatrix}
+  f_{xx} & f_{xy} \\
+  f_{xy} & f_{yy}
+\end{pmatrix}
+$$
+
+$$
+D = \det{H}
+$$
+
+# 得た知識
+
+- 倍率は例年1.5~1.7ぐらいらしい。
+- 数学（A-1）は落としてはいけないらしい。カルノー図は間違えても通るらしい。
+
+# 今後やりたいこと
+
+A-1を引き続き解いて、早く専門に行った方がよい。別に専門を先にしても良い。
+2023年のベータ関数の問題をやる。
+
+# リンク集
+
+- [ヤコビ行列，ヤコビアンの定義と極座標の例](https://manabitimes.jp/math/1209)
+- [連鎖律（多変数関数の合成関数の微分）](https://manabitimes.jp/math/1303)
+- [ロピタルの定理の条件と例題](https://manabitimes.jp/math/748)
+- [カージオイド曲線のグラフ，面積，長さ](https://manabitimes.jp/math/1086)
+- [停留点と極値の問題](https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q12121671222)
+- [余因子行列を用いた逆行列の求め方](https://avilen.co.jp/personal/knowledge-article/inverse-matrix-by-cofactor-matrix/)
+- [三角関数の極限](https://manabitimes.jp/math/2669)
+- [2次元空間の極座標](http://tau.doshisha.ac.jp/lectures/2009.calculus-II/html.dir/node39.html)
+- [ガンマ関数](https://manabitimes.jp/math/960)

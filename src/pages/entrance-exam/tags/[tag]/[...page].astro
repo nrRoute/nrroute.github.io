@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import type { Page, PaginateFunction } from "astro";
+import PostCard from "@/components/PostCard.astro";
+import Layout from "@/layouts/Layout.astro";
+
+interface Props {
+  page: Page<CollectionEntry<"entrance-exam">>;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  const allPosts = (await getCollection("entrance-exam")).sort(
+    (a, b) => b.data.created.valueOf() - a.data.created.valueOf(),
+  );
+  const allTags = allPosts.flatMap((page) => page.data.tags || []);
+  const uniqueTags = Array.from(new Set(allTags));
+  return uniqueTags.flatMap((tag) => {
+    const filteredPosts = allPosts.filter((page) => page.data.tags?.includes(tag));
+    return paginate(filteredPosts, {
+      params: { tag },
+      pageSize: 20
+    })
+  })
+}
+
+const { page } = Astro.props;
+const params = Astro.params;
+---
+
+<Layout title=`${params.tag}の記事一覧` description="記事一覧">
+  <div class="card w-auto">
+    <div class="relative flex justify-center">
+      <h1 class="text-2xl text-center">
+        {params.tag}の記事一覧
+      </h1>
+    </div>
+  </div>
+  <div class="border-b-2 border-current">
+  {
+    page.data
+    .map((page) => (
+      <PostCard
+        url={`/entrance-exam/${page.id}`}
+        title={page.data.title}
+        description=""
+        created={page.data.created}
+      />
+    ))
+  }
+  </div>
+  <div class="my-5 px-3">
+    <a href="/entrance-exam/tags">タグ一覧に戻る</a>
+  </div>
+</Layout>
+
+<style>
+  .text-2xl {
+    line-height: 2.5rem;
+  }
+
+  .border-b-2 {
+    border-bottom-width: 2px;
+  }
+
+  .border-current {
+    border-color: currentColor;
+  }
+
+  .my-5 {
+    margin-block: 1.25rem;
+  }
+
+  .px-3 {
+    padding-inline: 0.75rem;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+</style>

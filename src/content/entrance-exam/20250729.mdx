@@ -1,0 +1,51 @@
+---
+title: 院試勉強20250729
+created: 2025-07-29
+prev: entrance-exam/20250728
+next: entrance-exam/20250730
+tags:
+- logical-system
+- math
+---
+
+# Moore型順序回路の設計
+
+時刻 $t$、入力 $x$、出力 $z$ のタイムラインの表を斜めに見ていく。「$t=0$ の入力が与えられるのは、$t=0$ の状態に移ってかつ出力があってから」という考え方で解く。
+
+## 状態遷移図
+
+円の中に、状態と出力の組を書き込む。
+
+## 状態遷移表
+
+出力は現状態のみに依存するので、1列でよい。
+
+## D-FFで回路を組む
+
+ビット列と状態割り当てに注意。例えば、状態 $S_0,S_1,S_2,S_3$ があって、$S_2=11,S_3=10$ と割り当てるとき、D-FFの入力のカルノー図を書き間違えがち。
+
+# 合成関数の偏微分
+
+怖い！
+
+$z=f(x,y), x=g(r,\theta), y=h(r,\theta)$ とおくと、
+
+$$
+\frac{\partial z}{\partial r} = \frac{\partial z}{\partial x} \frac{\partial x}{\partial r} + \frac{\partial z}{\partial y} \frac{\partial y}{\partial r}
+$$
+
+$\theta$ についても同様。
+
+## ２次の偏微分
+
+$\frac{\partial z}{\partial x}$ を $r$ と $\theta$ の関数 $z'$ として考えると、これを $r$ で偏微分した結果は以下である。
+
+$$
+\frac{\partial z'}{\partial x} \frac{\partial x}{\partial r} = \frac{\partial^2 z}{\partial x^2} \frac{\partial x}{\partial r}
+$$
+
+# 多変数関数の極値
+
+極大か極小かを求めるのにヘッセ行列がいるらしい。
+
+参考: [多変数関数の極値判定とヘッセ行列](https://manabitimes.jp/math/1163)

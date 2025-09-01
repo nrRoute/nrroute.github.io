@@ -21,32 +21,23 @@ const { title, description } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <div class="grow">
-      <div class="container h-auto">
-        <div class="relative flex items-center">
-          <Title title="nrRoute" />
-        </div>
-        <slot />
-      </div>
-    </div>
+    <header class="relative flex items-center">
+      <Title title="nrRoute" />
+    </header>
+    <main class="flex-column grow">
+      <slot />
+    </main>
     <Footer />
   </body>
 </html>
 
 <style>
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+  }
+
   .grow {
     flex-grow: 1;
-  }
-
-  .container {
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 1.25rem;
-    padding-left: 1.25rem;
-  }
-
-  .h-auto {
-    height: auto;
   }
 </style>

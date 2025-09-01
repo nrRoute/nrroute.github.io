@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Post from "@/components/Post.astro";
+
+type Props = CollectionEntry<"pages">;
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  return pages.map((page) => ({
+    params: { id: page.id },
+    props: page,
+  }));
+}
+
+const page = Astro.props;
+---
+
+<Post
+  post={page}
+  backlink="/"
+  backlinkText="トップページに戻る"
+/>

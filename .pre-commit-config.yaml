@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: fix-frontmatter-date
+        name: Fix Frontmatter Date
+        files: ^src/content/.*\.mdx$
+        language: python
+        entry: python .githooks/date_updater.py
+        additional_dependencies: [python-frontmatter]
+        pass_filenames: true
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer

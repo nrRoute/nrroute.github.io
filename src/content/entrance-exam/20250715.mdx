@@ -1,0 +1,48 @@
+---
+title: 院試勉強20250715
+created: 2025-07-15
+prev: entrance-exam/20250714
+next: entrance-exam/20250716
+modified: 2025-07-17
+tags:
+- automaton-algorithm
+---
+
+# アルゴリズム論（計算クラス）
+
+資料が消失していて厳しい。Wikiからまとめる。
+
+## P
+
+- P: 多項式時間で解ける問題のクラス
+- P完全: Pの中で最も難しい問題のクラスであり、並列コンピュータで解ける
+- PSPACE: 多項式領域で解ける問題のクラス
+- PSPACE完全: PSPACEの中で最も難しい問題のクラス
+
+## NP
+
+- NP: 非決定性チューリングマシンで多項式時間で解ける問題のクラス。答えがyesとなるような問いに対して、多項式時間で検証できる証拠が存在する決定問題のクラス。
+- NP完全: NPの中で最も難しい問題のクラス。NPに属する他のすべての問題がNP完全な問題に多項式時間で帰着される。
+- NP困難: NP完全かそれより難しい問題のクラス。NP困難にはNPでない問題も属しうる。
+- co-NP: NPの補問題の集合。答えがnoであるような問いに対して、多項式時間で検証できる証拠が存在する。yesとnoをひっくり返すと、NPになる。
+
+## 他
+
+- EXPTIME: 指数時間で解ける問題のクラス
+
+## 性質など
+
+XX完全は、XXに属するすべての問題が多項式時間で帰着できて、自身もXXに属する問題。
+
+$\text{P} \subseteq \text{NP} \subseteq \text{PSPACE} \subseteq \text{EXPTIME}$ である。
+
+$\text{P} \subsetneq \text{EXPTIME}$ である。
+
+$\text{NP} \neq \text{co-NP} \implies \text{P} \neq \text{NP}$ である。証明は以下。
+
+> 対偶を示す。
+> P = NP を仮定。
+> P = co-P であるから、<br />
+> NP = P = co-P = co-NP である。
+
+2024年に $\text{P} \subseteq \text{PSPACE}$ の証明が出たので、今年はこっちが出る？

@@ -1,7 +1,8 @@
 ---
-title: "Tailwind CSSを剥がした"
-description: "このサイトからTailwind CSSを剥がした"
+title: Tailwind CSSを剥がした
+description: このサイトからTailwind CSSを剥がした
 created: 2024-12-13
+modified: 2025-07-14
 ---
 
 # 経緯
@@ -28,7 +29,7 @@ created: 2024-12-13
 ページ、レイアウト、コンポーネント、スタイル等、Tailwind CSS でスタイリングしているファイルを一つずつ見ていって置換していきます。
 置換できたら逐一開発環境でレイアウトなどが変わっていないか（変わっていても許容範囲内か）確認します。
 気をつけたいのが、Tailwind CSS のデフォルトの設定です。例えば `h1` などの見出しはデフォルトで文字サイズも太さも変わらないようになっています。
-また、デフォルト風で `*,:before,:after` に値が定義されている場合があり、自分の環境では以下の要素が定義されていたので、`global.css` に追加しておきます。
+また、デフォルト風[^3]で `*,:before,:after` に値が定義されている場合があり、自分の環境では以下の要素が定義されていたので、`global.css` に追加しておきます。
 
 ```css
 *,
@@ -49,7 +50,7 @@ created: 2024-12-13
 pnpm remove @astrojs/tailwind
 ```
 
-次に、`astro.config.ts` からインテグレーションに関する記述を削除します。@tailwindcss/typography を使用している場合は、拡張している部分を書き忘れないようにしましょう。
+次に、`astro.config.ts` からインテグレーションに関する記述を削除します。`@tailwindcss/typography` を使用している場合は、拡張している部分を書き忘れないようにしましょう。
 
 ## 3. 定義したクラスを整理する
 
@@ -61,8 +62,9 @@ pnpm remove @astrojs/tailwind
 デプロイされたサイトのビルド済みの CSS と比較しながらなんとかやりましたが、デフォルト値のことを忘れていて、
 置換したはずなのにレイアウトが崩れまくっている原因がわからず時間がかかりました。
 
-ついでに色々とスタイリングしなおしました。テーマ切り替えボタンをなくしたりしました[^3]。
+ついでに色々とスタイリングしなおしました。テーマ切り替えボタンをなくしたりしました[^4]。
 
 [^1]: インテグレーションの導入は[こちら](https://docs.astro.build/ja/guides/integrations-guide/tailwind/)から
 [^2]: `prose` クラスを使うと Tailwind 側が Markdown 内で選択できるテーマを制限してくる（[参考](https://github.com/tailwindlabs/tailwindcss-typography?tab=readme-ov-file#choosing-a-gray-scale)）。テーマを追加することはできるが、正直めんどくさい......
-[^3]: ダークモード自体は残っています。ブラウザの設定でどのテーマを表示するか判断するように変更しました。
+[^3]: [preflight](https://tailwindcss.com/docs/preflight) というやつだと思います
+[^4]: ダークモード自体は残っています。ブラウザの設定でどのテーマを表示するか判断するように変更しました。

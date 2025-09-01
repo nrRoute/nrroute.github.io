@@ -1,0 +1,240 @@
+---
+title: 数学まとめ
+created: 2025-07-31
+tags:
+- math
+- summary
+modified: 2025-08-01
+---
+
+# ガウス積分
+
+$$
+\int_{-\infty}^{\infty} e^{-x^2}dx=\sqrt{\pi}
+$$
+
+というもの。被積分関数は偶関数であるから、
+
+$$
+\int_{0}^{\infty} e^{-x^2}dx=\frac{\sqrt{\pi}}{2}
+$$
+
+もいえる。$x^2$ に係数がついているときは、置換積分で同じ形にできる。
+
+しかし、おそらくこのまま書いても点数がつかないので、導出を覚えておくべきだろう。
+
+$$
+\left(\int_{0}^{\infty}e^{-x^2}dx\right)^2 \\
+=\int_{0}^{\infty}e^{-x^2}dx\int_{0}^{\infty}e^{-y^2}dy \\
+=\int_{0}^{\infty}\int_{0}^{\infty}e^{-(x^2+y^2)}dxdy
+$$
+
+で、$x=r\cos{\theta}, y=r\sin{\theta} ~ (r>0)$ と極座標変換する。
+
+ヤコビアンを計算すると、
+
+$$
+\begin{vmatrix}
+  \frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\
+  \frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+\end{vmatrix}
+=
+\begin{vmatrix}
+  \cos\theta & -r\sin\theta \\
+  \sin\theta & r\cos\theta
+\end{vmatrix}
+= r(\cos{\theta}^2 + \sin{\theta}^2) = r
+$$
+
+となるので、$dxdy = rdrd\theta$ とわかる。
+
+これによって変換すると、もとの積分は
+
+$$
+\int_{0}^{\pi/2}\int_{0}^{\infty}e^{-r^2}rdrd\theta
+$$
+
+これを解いて、答えを得る。
+
+$$
+\int_{0}^{\pi/2}\left[-\frac{e^{-r^2}}{2}\right]_{0}^{\infty}d\theta
+=\Big[\theta\Big]_{0}^{\pi/2} = \frac{\pi}{2}
+$$
+
+2024年の試験には、ちょうど
+
+$$
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{-(x^2+y^2)}dxdy
+$$
+
+を計算させる問題が出題されている。被積分関数が偶関数であるから、上の方法に落とし込める。
+
+:arrow_right: 2018、2024
+
+# ガンマ関数とその性質
+
+## 定義
+
+ガンマ関数（正の実数の場合）は、$x>0$ に対して、
+
+$$
+\Gamma(x) = \int_{0}^{\infty}e^{-t}t^{x-1}dt
+$$
+
+という式で定まる。
+
+## 性質
+
+一つ目は、任意の正の実数 $x$ に対して、
+
+$$
+\Gamma(x+1) = x\Gamma(x)
+$$
+
+これは部分積分で証明できる。
+
+二つ目は、1/2での値がわかるというもので、
+
+$$
+\Gamma\left(\frac{1}{2}\right)=\sqrt{\pi}
+$$
+
+これはガウス積分と置換積分で導出できる。具体的には、$\Gamma(1/2)$ の $t$ を $u^2$ などで置換するとよい。
+
+二つ目の性質を問う問題が2024年に出題されている。
+
+:arrow_right: 2018、2024
+
+# 合成関数の偏微分
+
+怖い！
+
+$z=f(x,y), x=g(r,\theta), y=h(r,\theta)$ とおくと、
+
+$$
+\frac{\partial z}{\partial r} = \frac{\partial z}{\partial x} \frac{\partial x}{\partial r} + \frac{\partial z}{\partial y} \frac{\partial y}{\partial r}
+$$
+
+$\theta$ についても同様。
+
+## ２次の偏微分
+
+$\frac{\partial z}{\partial x}$ を $r$ と $\theta$ の関数 $z'$ として考えると、これを $r$ で偏微分した結果は以下である。
+
+$$
+\frac{\partial z'}{\partial x} \frac{\partial x}{\partial r} = \frac{\partial^2 z}{\partial x^2} \frac{\partial x}{\partial r}
+$$
+
+:arrow_right: 2023
+
+# 関数の極値
+
+https://w3e.kanazawa-it.ac.jp/math/category/bibun/henbibun/henkan-tex.cgi?target=/math/category/bibun/henbibun/kansuu-no-kyokuti.html
+
+$A=f_{xx}(a,b),B=f_{xy}(a,b),C=f_{yy}(a,b)$ として、$D=B^2-AC$ とおくと、
+
+1. $A\gt0, D\lt0 \implies f(a,b)$ は極小値
+2. $A\lt0, D\lt0 \implies f(a,b)$ は極大値
+3. $D\gt 0 \implies f(a,b)$ は極値でない
+
+:arrow_right: 2022
+
+## ヘッセ行列
+
+上の手順は結局形式化するとこれになる。
+
+$$
+H=
+\begin{pmatrix}
+  f_{xx} & f_{xy} \\
+  f_{xy} & f_{yy}
+\end{pmatrix}
+$$
+
+$$
+D = \det{H}
+$$
+
+大体 $f_{xy}=f_{yx}$ になるので、$D=B^2 -AC$ になる。
+
+# ロピタルの定理
+
+まず何か：
+$$
+\lim_{x\to a}\frac{f(x)}{g(x)} = \lim_{x\to a}\frac{f'(x)}{g'(x)}
+$$
+
+条件：
+- $\lim_{x\to a}\frac{f'(x)}{g'(x)}$ が存在
+- 極限の行き先の十分近くで $g'(x)\neq 0 ~ (a-\gamma \lt x \lt a, a\lt x \lt a+\gamma)$
+
+使う時は、すぐにイコールで繋ぐのではなく、まず $\lim_{x\to a}\frac{f'(x)}{g'(x)}$ を別に計算するように見せて、実際に値が求められたら、$g'(x)\neq 0$ と合わせて繋ぐとよさそう。
+
+複数回使う場合もある。
+
+:arrow_right: 2020
+
+## 例題
+
+$$
+\lim_{x\to 0}\left(\frac{1}{\sin{x}^2} - \frac{1}{x}\right)
+$$
+
+$$
+\lim_{x\to\infty}\frac{x^2}{e^x}
+$$
+
+
+# 積分の面積公式、曲線の長さの公式
+
+極座標の積分
+
+$$
+S = \frac{1}{2}\int_{\theta}^{\theta'} r^2d\theta
+$$
+
+これは図を書いて円の面積を求めれば導出できる。一周分積分すると0になるものにも注意（$cos\theta$ など）。
+
+:arrow_right: 2020
+
+## 例題
+
+$$
+r = 1 + \cos\theta
+$$
+
+# 余因子展開を使った逆行列の求め方
+
+まず符号 $(-1)^{i+j}$ に注意。最後に転置することにも注意。
+
+:arrow_right: 2020
+
+# ベータ関数とその性質
+
+## 定義
+
+$$
+B(p,q) = \int_0^1 x^{p-1}(1-x)^{q-1}dx
+$$
+
+ガンマ関数とも関係あるらしい。
+
+$$
+B(p,q) = \frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}
+$$
+
+## 公式
+
+1. $B(p,q)=B(q,p)$
+    * 証明: 置換積分
+2. $pB(p,q+1)=qB(p+1,q)$
+    * 証明: 部分積分
+3. $B(p,q)=B(p+1,q)+B(p,q+1)$
+    * 証明: 右辺を計算する
+
+:arrow_right: 2019、2023
+
+# 行列の対角化
+
+固有ベクトルを求める過程は多分ちゃんと書かなくてよい。固有ベクトルは $0$ でない実数 $k$ を用いて・・・と書く。
+固有ベクトルがすべて一次独立でないと対角化可能とは言えない。

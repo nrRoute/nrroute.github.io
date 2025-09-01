@@ -9,7 +9,7 @@ const formattedCreated = dateFormatter.format(created);
 ---
 
 <div class="card w-auto">
-  <div class="grid grid-col-2">
+  <div class="flex-column">
     <div>
       <h2 class="mb-2 text-xl">
         <a href={url}>
@@ -17,11 +17,13 @@ const formattedCreated = dateFormatter.format(created);
         </a>
       </h2>
     </div>
-    <div class="">
+    <div>
       {formattedCreated}
     </div>
+    <div>
+      {description}
+    </div>
   </div>
-  <p>{description}</p>
 </div>
 
 <style>
@@ -41,11 +43,9 @@ const formattedCreated = dateFormatter.format(created);
     margin-left: auto;
   }
 
-	.grid {
-		display: grid;
-	}
-
-	.grid-cols-2 {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
+  .flex-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 </style>

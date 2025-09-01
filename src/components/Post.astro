@@ -1,0 +1,120 @@
+---
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import Prose from '@/components/Prose.astro';
+import Layout from '@/layouts/Layout.astro';
+
+interface Props {
+  post: CollectionEntry<"blog" | "entrance-exam" | "pages">;
+  backlink?: string;
+  backlinkText?: string;
+}
+
+const { post, backlink, backlinkText } = Astro.props;
+
+const dateFormatter = new Intl.DateTimeFormat("ja-JP", {
+  dateStyle: "medium",
+});
+
+const formattedCreated = dateFormatter.format(post.data.created);
+const formattedModified = dateFormatter.format(post.data.modified);
+
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title} description={post.data.title}>
+  <div class="card w-auto">
+    <div class="relative flex justify-center mb-3">
+      <h1 class="text-2xl text-center">
+        {post.data.title}
+      </h1>
+    </div>
+    <div class="flex justify-around border-b-2 border-current mb-2">
+      <div>作成日: {formattedCreated}</div>
+      {
+        post.data.modified && <div>更新日: {formattedModified}</div>
+      }
+    </div>
+    {
+      "tags" in post.data && post.data.tags && post.data.tags.length > 0 &&
+      <div class="text-center mb-2">
+        {post.data.tags.map((tag) => (
+          <a href={`tags/${tag}`} class="ml-2">{tag}</a>
+        ))}
+      </div>
+    }
+    {
+      "description" in post.data && post.data.description &&
+      <div class="text-center">
+        {post.data.description}
+      </div>
+    }
+  </div>
+  <Prose>
+    <Content />
+  </Prose>
+  {
+    ("prev" in post.data || "next" in post.data) &&
+    <div class="my-5 flex justify-around px-3">
+      {"prev" in post.data && post.data.prev &&
+        <a href={`/${post.data.prev}`}>前のページ</a>}
+      {"next" in post.data && post.data.next &&
+        <a href={`/${post.data.next}`}>次のページ</a>}
+    </div>
+  }
+  <div class="my-5 ml-auto px-3">
+    <a href={backlink}>{backlinkText}</a>
+  </div>
+</Layout>
+
+<style>
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .mb-3 {
+    margin-bottom: 0.75rem;
+  }
+
+  .ml-2 {
+    margin-inline-start: 0.5rem;
+  }
+
+  .text-2xl {
+    line-height: 2.5rem;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .justify-center {
+    justify-content: center;
+  }
+
+  .justify-around {
+    justify-content: space-around;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .border-b-2 {
+    border-bottom-width: 2px;
+  }
+
+  .border-current {
+    border-color: currentColor;
+  }
+
+  .my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .px-3 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+</style>

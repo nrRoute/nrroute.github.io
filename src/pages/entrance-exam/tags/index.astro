@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+
+const allPosts = await getCollection("entrance-exam");
+const allTags = allPosts.flatMap((page) => page.data.tags || []);
+const uniqueTags = Array.from(new Set(allTags)).sort((a, b) => a.localeCompare(b));
+---
+
+<Layout title=`タグ一覧` description="タグ一覧">
+  <div class="border-b-2 border-current">
+    <ul>
+    {
+      uniqueTags.map((tag) => (
+        <li>
+          <a href={`/entrance-exam/tags/${tag}`} class="mb-2">
+            {tag}
+          </a>
+        </li>
+      ))
+    }
+    </ul>
+  </div>
+  <div class="my-5 px-3">
+    <a href="/">トップページに戻る</a>
+  </div>
+</Layout>
+
+<style>
+  .border-b-2 {
+    border-bottom-width: 2px;
+  }
+
+  .border-current {
+    border-color: currentColor;
+  }
+
+  .my-5 {
+    margin-block: 1.25rem;
+  }
+
+  .px-3 {
+    padding-inline: 0.75rem;
+  }
+
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+</style>

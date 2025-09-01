@@ -18,7 +18,25 @@ const pages = defineCollection({
     description: z.string().optional(),
     created: z.date(),
     modified: z.date().optional(),
+    prev: z.string().optional(),
+    next: z.string().optional(),
   }),
 });
 
-export const collections = { blog, pages };
+const entranceExam = defineCollection({
+  loader: glob({ base: "./src/content/entrance-exam/", pattern: "**/*.{md,mdx}" }),
+  schema: z.object({
+    title: z.string(),
+    created: z.date(),
+    modified: z.date().optional(),
+    prev: z.string().optional(),
+    next: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+  }),
+});
+
+export const collections = {
+  "blog": blog,
+  "pages": pages,
+  "entrance-exam": entranceExam
+};

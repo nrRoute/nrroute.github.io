@@ -1,0 +1,66 @@
+---
+title: Markdownのfront matterをコミット時に自動で変更する
+description: pre-commitとpython-frontmatterを使ってコミット時にfront matterを編集する
+created: 2025-07-15
+modified: 2025-07-17
+---
+
+# はじめに
+最近はこのサイトを数日おきに更新しているのですが、頻度が高いからか、記事の更新日を頻繁に更新し忘れます。なので、コミット時にコミットした日の日付を勝手に入れてくれるようにしました。
+
+# pre-commit
+[pre-commit](https://pre-commit.com/)は簡単にGitの色々なフックを管理、実行することができる便利ツールです。別に普通にpre-commitのスクリプトを書いても良かったのですが、シェルスクリプトに明るくないので今回はやめておきました。
+`.pre-commit-config.yaml` をプロジェクトのルートに作成し、そこにどういうフックを実行するかを書いていきます。今回はこんな感じにしました。
+
+```yaml title=".pre-commit-config.yaml"
+repos:
+  - repo: local
+    hooks:
+      - id: fix-frontmatter-date
+        name: Fix Frontmatter Date
+        files: ^src/content/.*\.mdx$
+        language: python
+        entry: python .githooks/date_updater.py
+        additional_dependencies: [python-frontmatter]
+        pass_filenames: true
+```
+
+コミット前に `src/content/` 以下にあるMDXファイルに対して、ローカルで作成したフック（`.githooks/date_updater.py`）を実行するというものです。追加のパッケージが必要だったので、それを `additional_dependencies` に追加しています。
+
+# スクリプト
+時間がなかったので、ファイルを編集するスクリプトはPythonで作ることにしました[^1]。MDXファイルのfront matterの要素を触りたかったので、扱いやすいものはないかと探していると、
+[Python Frontmatter](https://python-frontmatter.readthedocs.io/en/latest/index.html)を見つけました。
+
+コードはこんな感じです。
+
+```py title="date_updater.py"
+import sys, frontmatter, datetime, subprocess
+from pathlib import Path
+
+for name in sys.argv[1:]:
+    path = Path(name)
+    post = frontmatter.load(path)
+    if post.get("created") < datetime.datetime.today().date():
+        if not post.get("modified") or post.get("modified") < datetime.datetime.today().date():
+            post["modified"] = datetime.datetime.today().date()
+            text = frontmatter.dumps(post, sort_keys=False).rstrip("\n") + "\n"
+            path.write_text(text, encoding="utf-8")
+```
+
+pre-commitがコミットするファイルのパスを引数に渡してくれるので、設定と合わせてMDXファイルそれぞれに対してfront matterを取得し、「作成日がコミット日よりも前」かつ「「更新されていない」または「更新日がコミット日より前」」であれば、更新日のfront matterを追加するというものです。
+
+# 使い方
+
+まず、このコマンドでフックを設定します。
+
+```sh
+pre-commit install
+```
+
+設定できたら、あとはふつうにコミットすればよいです。フックによってファイルが編集されると、フックがfailするので、再度 `git add` `git commit` しなおします。
+すべてのフックがpassしたら、無事コミットできます。
+
+# おわりに
+まだpre-commitの仕様についてよくわかっていないので、今後も修正が入ると思います。`stages` がいらないんじゃないかとか `git add` しなかったらどうなのかとか・・・
+
+[^1]: LLMを使ってコードを書きやすいし、色々なパッケージがあるので

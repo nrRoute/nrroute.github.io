@@ -1,0 +1,81 @@
+---
+title: 院試勉強20250716
+created: 2025-07-16
+prev: entrance-exam/20250715
+next: entrance-exam/20250718
+modified: 2025-08-19
+tags:
+- computer-system
+- programming-language
+---
+
+# キャッシュ（計算機システム）
+
+キャッシュのことを全然わかっていない。
+
+## ヒットとミスの判定
+
+タグとインデックス（セット）を見る。インデックスとタグが一致していればヒット。タグが一致していなければミス。
+
+## load/store の対応
+
+loadでヒットしたときはなにもしない。
+loadでミスしたときは、ライトバックでdirty bitが1なら書き戻しが起きて、0のときは起きない。その後、主記憶から該当ブロックがロードされて置き換わる。
+
+storeでヒットしたときはキャッシュの該当する語が書き換わる。dirty bitが0なら1になる。
+storeでミスしたときは、dirty bitが0ならブロックが置き換わって、該当する語が書き換わる。1なら書き戻しが起こる。
+
+dirty bitは、ブロックが主記憶との差分があるかを管理する。差分がある（1）場合、置換対象であれば書き戻しが起こる。
+
+# プログラミング言語
+
+## LL(1) 文法
+
+Left-to-right parse Leftmost-derivation with 1-symbol lookahead Grammer。つまり、左から見ていって、1文字先読みして最左導出をする。
+
+### 判定
+
+ざっくりいうと、Nulls、FIRST、FOLLOWを計算して、解析表を作る。解析表で衝突が起こったら、LL(1)ではない。
+
+Nullsは、空文字を生成しうる非終端記号の集合。
+FIRSTは、ある非終端記号Xについて、Xから生成される語の先頭文字の集合。
+FOLLOWは、ある非終端記号Xについて、Xの次に続きうる終端記号の集合。
+
+### Nulls、FIRST、FOLLOWの計算
+
+Nullsは、各書き換え規則 $X \to Y_1 \dots Y_n$ に対して（$Y_i$ は終端・非終端記号）、
+
+$$
+\def\nulls{\text{Nulls}}
+Y_1\in \nulls \land \dots \land Y_n \in \nulls \implies X\in \nulls
+$$
+
+であれば、XをNullsに追加する。
+
+FIRST(X)は、各書き換え規則 $X \to Y_1 \dots Y_n$ および $k=1,...,n$ に対して（$Y_i$ は終端・非終端記号）、
+
+$$
+\def\nulls{\text{Nulls}}
+Y_1\in \nulls \land \dots \land Y_{k-1}\in \nulls\implies \text{FIRST}(X) \supseteq \text{FIRST}(Y_k)
+$$
+
+であれば、要素を追加[^1]。
+
+FOLLOW(X)は、各書き換え規則 $X \to Y_1 \dots Y_n$ に対して（$Y_i$ は終端・非終端記号）、
+
+$$
+\def\nulls{\text{Nulls}}
+Y_{k+1}\in \nulls \land \dots \land Y_{m-1}\in \nulls \implies \text{FOLLOW}(Y_k)\supseteq\text{FIRST}(Y_m)~(1\le k\lt m\le n)
+$$
+$$
+\def\nulls{\text{Nulls}}
+Y_{k+1}\in \nulls \land \dots \land Y_{n}\in \nulls \implies \text{FOLLOW}(Y_k)\supseteq\text{FOLLOW}(X)~(1\le k\le n)
+$$
+
+であれば、要素を追加。
+
+## LL(1) 言語
+
+まず、LL(1)文法から生成される言語はLL(1)言語。しかし、LL(1)文法でなくてもLL(1)言語となる場合もある。
+
+[^1]: $Y$の添字が$k-1$であることに注意。$n=1$のときはならばの仮定がなくなるので結論が成り立ち、$Y_1$が追加される。

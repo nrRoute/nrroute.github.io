@@ -22,7 +22,7 @@ const posts = (await getCollection("blog")).sort(
     ))
   }
   </div>
-  <div class="my-5 ml-auto px-3">
+  <div class="my-5 px-3">
     <a href="/">トップページに戻る</a>
   </div>
 </Layout>
@@ -37,16 +37,10 @@ const posts = (await getCollection("blog")).sort(
   }
 
   .my-5 {
-    margin-top: 1.25rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .ml-auto {
-    margin-left: auto;
+    margin-block: 1.25rem;
   }
 
   .px-3 {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-inline: 0.75rem;
   }
 </style>
